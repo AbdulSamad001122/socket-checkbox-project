@@ -12,6 +12,10 @@ const PORT = 3000;
 
 app.use(express.static("public"));
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 let checkboxState = {};
 
 io.on("connection", (socket) => {
