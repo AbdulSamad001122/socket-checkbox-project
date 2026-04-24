@@ -32,7 +32,8 @@
         height: 16px;
         margin: 0;
       }
-      #modal-overlay {
+      /* Modal Styles */
+      #modal-overlay, #admin-modal-overlay, #error-modal-overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
         background: rgba(0,0,0,0.7);
@@ -41,7 +42,7 @@
         justify-content: center;
         z-index: 1000;
       }
-      #modal {
+      .modal {
         background: #113322;
         padding: 30px;
         border-radius: 8px;
@@ -49,7 +50,7 @@
         text-align: center;
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       }
-      #modal input {
+      .modal input {
         padding: 10px;
         font-size: 16px;
         border: 1px solid #22c55e;
@@ -59,7 +60,7 @@
         margin-bottom: 15px;
         width: 80%;
       }
-      #modal button {
+      .modal button {
         padding: 10px 20px;
         background: #22c55e;
         color: #0f291e;
@@ -69,9 +70,10 @@
         cursor: pointer;
         font-weight: bold;
       }
-      #modal button:hover {
+      .modal button:hover {
         background: #4ade80;
       }
+      /* Tooltip Styles */
       #tooltip {
         position: fixed;
         background: #22c55e;
@@ -87,16 +89,52 @@
         white-space: nowrap;
         box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       }
+      #reset-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #b91c1c;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #reset-btn:hover {
+        background: #dc2626;
+      }
     </style>
   </head>
   <body>
+    <button id="reset-btn">Reset</button>
+
     <div id="modal-overlay">
-      <div id="modal">
+      <div class="modal">
         <h2>Welcome</h2>
         <p>Please enter your username:</p>
         <input type="text" id="username-input" placeholder="Username" />
         <br />
         <button id="join-btn">Join</button>
+      </div>
+    </div>
+
+    <div id="admin-modal-overlay" style="display: none;">
+      <div class="modal">
+        <h2>Admin Reset</h2>
+        <p>Enter Admin Password:</p>
+        <input type="password" id="admin-password-input" placeholder="Password" />
+        <br />
+        <button id="admin-submit-btn">Submit</button>
+        <button id="admin-cancel-btn" style="background: #b91c1c; margin-left: 10px; color: white;">Cancel</button>
+      </div>
+    </div>
+
+    <div id="error-modal-overlay" style="display: none;">
+      <div class="modal" style="border-color: #ef4444;">
+        <h2 style="color: #ef4444;">Access Denied</h2>
+        <p>Incorrect Admin Password!</p>
+        <button id="error-close-btn" style="background: #ef4444; color: white;">Close</button>
       </div>
     </div>
 

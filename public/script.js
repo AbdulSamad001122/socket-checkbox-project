@@ -3,9 +3,19 @@ const socket = io();
 let username = "";
 const tooltip = document.getElementById("tooltip");
 const container = document.getElementById("container");
+
 const modalOverlay = document.getElementById("modal-overlay");
 const usernameInput = document.getElementById("username-input");
 const joinBtn = document.getElementById("join-btn");
+
+const resetBtn = document.getElementById("reset-btn");
+const adminModalOverlay = document.getElementById("admin-modal-overlay");
+const adminPasswordInput = document.getElementById("admin-password-input");
+const adminSubmitBtn = document.getElementById("admin-submit-btn");
+const adminCancelBtn = document.getElementById("admin-cancel-btn");
+
+const errorModalOverlay = document.getElementById("error-modal-overlay");
+const errorCloseBtn = document.getElementById("error-close-btn");
 
 const localStates = {};
 
@@ -16,7 +26,27 @@ joinBtn.addEventListener("click", () => {
     return;
   }
   modalOverlay.style.display = "none";
-  console.log(`${username} connected`);
+});
+
+resetBtn.addEventListener("click", () => {
+  adminPasswordInput.value = "";
+  adminModalOverlay.style.display = "flex";
+});
+
+adminCancelBtn.addEventListener("click", () => {
+  adminModalOverlay.style.display = "none";
+});
+
+adminSubmitBtn.addEventListener("click", () => {
+  const password = adminPasswordInput.value;
+  if (password) {
+    socket.emit("admin-reset", password);
+    adminModalOverlay.style.display = "none";
+  }
+});
+
+errorCloseBtn.addEventListener("click", () => {
+  errorModalOverlay.style.display = "none";
 });
 
 function showTooltip(e, id) {
@@ -65,6 +95,16 @@ for (let i = 0; i < 100000; i++) {
   container.appendChild(checkbox);
 }
 
+socket.on("initial-state", (state) => {
+  for (const id in state) {
+    localStates[id] = state[id];
+    const box = document.getElementById(id);
+    if (box) {
+      box.checked = state[id].state;
+    }
+  }
+});
+
 socket.on("reset", () => {
   for (const id in localStates) {
     delete localStates[id];
@@ -78,8 +118,11 @@ socket.on("reset", () => {
   hideTooltip();
 });
 
+socket.on("reset-failed", () => {
+  errorModalOverlay.style.display = "flex";
+});
+
 socket.on("update", (data) => {
-  console.log(`Checkbox ${data.id} is checked by ${data.username}`);
   localStates[data.id] = { state: data.state, username: data.username };
 
   const box = document.getElementById(data.id);
